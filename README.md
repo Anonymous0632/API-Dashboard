@@ -13,10 +13,6 @@
 - Token 与 API Key 存入 Scriptable Keychain，不写入脚本
 - MiniMax 钱包余额可通过 Cloudflare Worker 代理查询，避免手机端 Cookie 请求失败
 
-## 截图
-
-![API Dashboard widget](docs/screenshot.png)
-
 ## 文件说明
 
 | 文件 | 说明 |

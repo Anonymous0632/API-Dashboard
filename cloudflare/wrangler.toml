@@ -1,0 +1,6 @@
+name = "minimax-wallet-balance"
+main = "minimax-wallet-worker.js"
+compatibility_date = "2024-12-01"
+
+[vars]
+MINIMAX_REGION = "cn"

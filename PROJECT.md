@@ -1,0 +1,74 @@
+# API Dashboard 项目说明
+
+## 1. 项目定位
+
+API Dashboard 是一个面向个人使用的 iOS 小组件，用于集中查看多家 AI 服务的额度或账户余额。项目优先保证部署简单、凭证本地保存、显示信息直接可读。
+
+当前实现基于 Scriptable，不依赖 Apple Developer Program。除 MiniMax 钱包余额可选 Cloudflare Worker 代理外，其余数据由手机端直接请求。
+
+## 2. 支持范围
+
+| 平台 | 展示内容 | 凭证来源 |
+| --- | --- | --- |
+| Claude Code | 5 小时额度、本周额度、恢复时间 | macOS Keychain 中的 Claude Code OAuth 信息 |
+| Codex | 5 小时额度、本周额度、恢复时间 | `~/.codex/auth.json` |
+| MiniMax | Token Plan 套餐额度、账户钱包余额 | MiniMax API Key、MiniMax Cookie 或 Worker 代理 |
+| DeepSeek | API 余额、充值余额、赠送余额 | DeepSeek API Key |
+
+`settings.enabled` 用于选择要显示的平台。未启用或未配置凭证的平台不会出现在小组件中。
+
+## 3. 数据接口
+
+| 数据 | 请求地址 | 认证方式 |
+| --- | --- | --- |
+| Claude Code usage | `https://api.anthropic.com/api/oauth/usage` | Bearer OAuth access token |
+| Codex usage | `https://chatgpt.com/backend-api/wham/usage` | Bearer access token + `chatgpt-account-id` |
+| MiniMax Token Plan | `https://api.minimax.io/v1/token_plan/remains` 或 `https://api.minimaxi.com/v1/token_plan/remains` | MiniMax API Key |
+| MiniMax wallet | `https://www.minimax.io/account/query_balance` 或 `https://www.minimaxi.com/account/query_balance` | 控制台 Cookie；推荐放入 Worker Secret |
+| DeepSeek balance | `https://api.deepseek.com/user/balance` | DeepSeek API Key |
+
+Claude Code 和 Codex 的接口返回使用比例，脚本统一换算为剩余比例。MiniMax 和 DeepSeek 的余额接口返回金额字段，脚本优先展示可用余额。
+
+## 4. MiniMax Worker 方案
+
+MiniMax 钱包接口对移动端或非浏览器请求较敏感，Scriptable 直连可能返回 `1004 not authorized`。因此项目提供 Cloudflare Worker：
+
+- `MINIMAX_COOKIE` 保存到 Worker Secret
+- `WALLET_PROXY_TOKEN` 作为访问密码
+- Worker 查询 MiniMax 钱包接口后只返回余额字段
+- 小组件保存 Worker URL 和访问密码，不保存 MiniMax Cookie
+- 如果请求头传递不稳定，可使用 `?token=` URL 参数兜底
+
+Worker 返回字段包括 `available_amount`、`cash_balance`、`voucher_balance`、`credit_balance`、`owed_amount` 和 `updated_at`。
+
+## 5. 凭证处理
+
+- `export-tokens.sh` 负责在 macOS 上生成一次性导入 JSON。
+- Scriptable 首次运行时会读取 iCloud 目录中的 `aiquota-token.json` 或剪贴板 JSON。
+- 导入成功后，凭证写入 Scriptable Keychain。
+- `aiquota-token.json` 会被脚本删除，避免反复覆盖已刷新的凭证。
+- 仓库 `.gitignore` 明确排除本地 token、环境变量和 Cloudflare 本地调试密钥。
+
+## 6. 小组件布局
+
+- 中号组件为主目标尺寸。
+- 1-3 个平台时单行等宽展示；4 个平台时自动拆为 2x2。
+- 每张卡片固定宽高，内部用弹性间距分配标题、用量和余额。
+- 额度百分比使用绿色、橙色、红色表达风险等级。
+- 金额低于 5 元显示红色，5-20 元显示橙色，高于 20 元使用平台主题色。
+- 数据请求失败时优先回退缓存，不影响其他平台展示。
+
+## 7. 已知限制
+
+- 部分接口不是官方公开稳定 API，平台调整后可能需要维护。
+- iOS 小组件刷新由系统调度，无法保证实时刷新。
+- MiniMax Cookie 可能提前失效，过期后需要更新 Cloudflare Secret。
+- Claude Code / Codex 的接口只提供比例和恢复时间，不提供完整 token 计数。
+
+## 8. 验证清单
+
+- `node --check ai-quota-widget.js`
+- `node --check cloudflare/minimax-wallet-worker.js`
+- `bash -n export-tokens.sh`
+- `git diff --check`
+- Worker 使用正确 token 返回余额，错误 token 返回 401

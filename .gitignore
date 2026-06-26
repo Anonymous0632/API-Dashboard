@@ -1,0 +1,10 @@
+# 任何含真实 token 的本地文件
+*.token
+*.secret
+secrets.json
+aiquota-token.json
+auth.local.*
+.env
+.dev.vars
+.wrangler/
+AGENTS.md

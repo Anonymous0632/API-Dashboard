@@ -55,10 +55,10 @@ bash export-tokens.sh > aiquota-token.json
 
 ```bash
 cd android
-gradle :app:assembleDebug
+./gradlew :app:assembleDebug
 ```
 
-仓库当前没有提交 Gradle Wrapper；可用 Android Studio 直接同步构建，或在本机安装 JDK 17、Android SDK 和 Gradle 后执行构建。
+仓库已包含 Gradle Wrapper；安装 JDK 17 和 Android SDK 36 后可直接执行上面的命令，或用 Android Studio 打开 `android/` 同步构建。
 
 ## 安全说明
 

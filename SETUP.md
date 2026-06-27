@@ -190,10 +190,10 @@ bash export-tokens.sh > aiquota-token.json
 
 ```bash
 cd "/Users/anonymous/Downloads/API Dashboard/android"
-gradle :app:assembleDebug
+./gradlew :app:assembleDebug
 ```
 
-仓库当前没有提交 Gradle Wrapper。可先用 Android Studio 同步工程，或安装本机 Gradle/JDK 17/Android SDK 36 后执行构建。构建成功后 debug APK 位于 `android/app/build/outputs/apk/debug/app-debug.apk`。
+仓库已包含 Gradle Wrapper。可先用 Android Studio 同步工程，或安装 JDK 17 / Android SDK 36 后执行构建。构建成功后 debug APK 位于 `android/app/build/outputs/apk/debug/app-debug.apk`。
 
 ### 2. 安装并导入配置
 

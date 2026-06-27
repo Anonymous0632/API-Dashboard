@@ -86,6 +86,6 @@ Worker 返回字段包括 `available_amount`、`cash_balance`、`voucher_balance
 - `bash -n export-tokens.sh`
 - `git diff --check`
 - Worker 使用正确 token 返回余额，错误 token 返回 401
-- Android 工程：安装 Android Studio 后同步构建，或执行 `cd android && gradle :app:assembleDebug`
+- Android 工程：安装 Android Studio 后同步构建，或执行 `cd android && ./gradlew :app:assembleDebug`
 - Android 构建产物：`android/app/build/outputs/apk/debug/app-debug.apk`，构建产物不提交仓库
 - Android 模拟器检视：安装 debug APK 后，桌面可添加 `API Dashboard` 4x2 小组件；非敏感假缓存下 4 平台卡片布局通过

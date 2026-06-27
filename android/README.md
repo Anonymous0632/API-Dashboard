@@ -24,7 +24,7 @@
 
 ```bash
 cd android
-gradle :app:assembleDebug
+./gradlew :app:assembleDebug
 ```
 
-当前仓库没有提交 Gradle Wrapper。可用 Android Studio 直接同步构建，或在安装 JDK 17、Android SDK 36 和本机 Gradle 后执行上面的命令。构建成功后 debug APK 位于 `app/build/outputs/apk/debug/app-debug.apk`。
+仓库已包含 Gradle Wrapper。可用 Android Studio 直接同步构建，或在安装 JDK 17 和 Android SDK 36 后执行上面的命令。构建成功后 debug APK 位于 `app/build/outputs/apk/debug/app-debug.apk`。

@@ -77,7 +77,7 @@ Worker 返回字段包括 `available_amount`、`cash_balance`、`voucher_balance
 - Android 后台刷新受 WorkManager 与系统省电策略调度，无法保证分钟级实时刷新。
 - MiniMax Cookie 可能提前失效，过期后需要更新 Cloudflare Secret。
 - Claude Code / Codex 的接口只提供比例和恢复时间，不提供完整 token 计数。
-- Android APK 已在临时 JDK 17 + Android SDK 36 + Gradle 8.14.3 工具链下完成命令行构建；真机/模拟器上的桌面小组件视觉与交互仍需设备环境验证。
+- Android APK 已在临时 JDK 17 + Android SDK 36 + Gradle 8.14.3 工具链下完成命令行构建；模拟器已验证 App 启动、Launcher 识别 4x2 小组件、桌面添加和 4 平台 2x2 布局。真实凭证接口联调仍需在用户设备或授权测试凭证环境中完成。
 
 ## 9. 验证清单
 
@@ -88,3 +88,4 @@ Worker 返回字段包括 `available_amount`、`cash_balance`、`voucher_balance
 - Worker 使用正确 token 返回余额，错误 token 返回 401
 - Android 工程：安装 Android Studio 后同步构建，或执行 `cd android && gradle :app:assembleDebug`
 - Android 构建产物：`android/app/build/outputs/apk/debug/app-debug.apk`，构建产物不提交仓库
+- Android 模拟器检视：安装 debug APK 后，桌面可添加 `API Dashboard` 4x2 小组件；非敏感假缓存下 4 平台卡片布局通过

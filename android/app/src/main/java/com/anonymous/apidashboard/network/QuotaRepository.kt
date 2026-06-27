@@ -420,7 +420,7 @@ class QuotaRepository(context: Context) {
         val cash = numberValue(data.opt("cash_balance"))
         val voucher = numberValue(data.opt("voucher_balance"))
         val detail = if (cash != null || voucher != null) {
-            "现金 ¥${"%.2f".format(cash ?: 0.0)} / 代金券 ¥${"%.2f".format(voucher ?: 0.0)}"
+            "现金 ¥${"%.2f".format(cash ?: 0.0)} / 券 ¥${"%.2f".format(voucher ?: 0.0)}"
         } else {
             val updatedAt = parseDateMs(data.optString("updated_at"))
             if (updatedAt != null) "Worker ${agoText(updatedAt)}" else "账户钱包"

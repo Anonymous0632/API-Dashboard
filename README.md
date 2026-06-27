@@ -29,6 +29,11 @@
 
 ## 快速开始
 
+本仓库现在包含两个部署目标：
+
+- `ai-quota-widget.js`：部署到 iPhone Scriptable。
+- `android/`：构建为 Android APK，安装到安卓手机后添加桌面小组件。
+
 ### iPhone Scriptable
 
 1. 在 iPhone 安装 Scriptable。
@@ -46,19 +51,42 @@ bash export-tokens.sh > aiquota-token.json
 
 ### Android 原生小组件
 
-1. 用 Android Studio 打开 `android/` 目录。
-2. 运行 `app` 到安卓手机或模拟器。
-3. 在 App 内粘贴或选择 `aiquota-token.json` 导入。
-4. 在桌面添加 `API Dashboard` 小组件。
+1. 准备构建环境：安装 Android Studio，或安装 JDK 17 + Android SDK 36。
+2. 在 Mac 上生成导入配置：
 
-命令行构建：
+```bash
+bash export-tokens.sh > aiquota-token.json
+```
+
+3. 构建 Android debug APK：
 
 ```bash
 cd android
 ./gradlew :app:assembleDebug
 ```
 
-仓库已包含 Gradle Wrapper；安装 JDK 17 和 Android SDK 36 后可直接执行上面的命令，或用 Android Studio 打开 `android/` 同步构建。
+4. 安装 APK 到安卓手机：
+
+```bash
+adb install -r app/build/outputs/apk/debug/app-debug.apk
+```
+
+也可以用 Android Studio 打开 `android/`，选择 `app` 直接运行到手机。
+
+5. 打开手机上的 `API Dashboard` App，在 App 内粘贴或选择 `aiquota-token.json` 导入。
+6. 回到安卓桌面，长按空白处 → 小组件 → 添加 `API Dashboard` 4x2 小组件。
+
+构建产物位置：
+
+```bash
+android/app/build/outputs/apk/debug/app-debug.apk
+```
+
+仓库已包含 Gradle Wrapper；安装 JDK 17 和 Android SDK 36 后可直接构建。Android 端使用与 iPhone 相同的 `aiquota-token.json` 字段，导入后凭证写入 Android 加密存储。
+
+### MiniMax Worker 代理
+
+MiniMax 钱包余额推荐继续使用 Cloudflare Worker 代理。部署步骤见 [SETUP.md](SETUP.md) 的「方案 B：用 Cloudflare Worker 查 MiniMax 钱包余额」。Android 和 iPhone 都可以使用同一个 Worker URL 与访问密码。
 
 ## 安全说明
 

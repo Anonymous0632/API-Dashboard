@@ -60,6 +60,8 @@ Worker 返回字段包括 `available_amount`、`cash_balance`、`voucher_balance
 - Android 导入成功后，凭证写入加密 SharedPreferences；小组件只读取非敏感缓存快照。
 - 仓库 `.gitignore` 明确排除本地 token、环境变量和 Cloudflare 本地调试密钥。
 
+Android 部署流程已写入 README：生成 `aiquota-token.json`，在 `android/` 下执行 `./gradlew :app:assembleDebug`，将 `app/build/outputs/apk/debug/app-debug.apk` 安装到手机，再在 App 内导入 JSON 并添加 4x2 桌面小组件。
+
 ## 7. 小组件布局
 
 - 中号组件为主目标尺寸。

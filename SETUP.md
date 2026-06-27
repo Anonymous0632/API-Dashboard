@@ -1,5 +1,10 @@
 # 安装与首次配置
 
+本项目支持两种手机端：
+
+- iPhone：Scriptable 小组件
+- Android：原生 App + Glance 桌面小组件
+
 ## 准备
 - iPhone 安装 **Scriptable**（App Store 免费）
 - Mac 已登录 Claude Code 与 Codex（token 才存在本地）
@@ -7,7 +12,7 @@
 - 如需 MiniMax 直接购买 API 钱包余额：推荐用 Cloudflare Worker 代理查询；准备 Cloudflare 账号和 MiniMax 控制台 Cookie
 - 如需 DeepSeek：准备 DeepSeek API Key，推荐先在 Mac 环境变量里设置 `DEEPSEEK_API_KEY`
 
-## 步骤
+## 通用步骤
 
 ### 1. 在 Mac 导出 token
 ```bash
@@ -39,6 +44,8 @@ bash export-tokens.sh > aiquota-token.json
 ```json
 { "settings": { "enabled": ["codex", "minimax", "deepseek"] } }
 ```
+
+## iPhone Scriptable
 
 ### 2. 把 token 传到 iPhone
 推荐把 `aiquota-token.json` 放进 iCloud 的 Scriptable 文件夹，脚本会优先读取并导入，导入成功后自动删除。
@@ -165,3 +172,48 @@ bash export-tokens.sh > aiquota-token.json
 
 **Windows / Linux 用户**
 `export-tokens.sh` 目前只支持 macOS。其他系统可按同样 JSON 结构手动生成 `aiquota-token.json`。
+
+## Android 原生小组件
+
+### 1. 打开 Android 工程
+
+用 Android Studio 打开仓库内的 `android/` 目录，等待 Gradle 同步完成。当前工程使用：
+
+- Kotlin
+- Jetpack Glance
+- WorkManager
+- EncryptedSharedPreferences / Android Keystore
+- OkHttp
+
+命令行构建可执行：
+
+```bash
+cd "/Users/anonymous/Downloads/API Dashboard/android"
+gradle :app:assembleDebug
+```
+
+仓库当前没有提交 Gradle Wrapper。可先用 Android Studio 同步工程，或安装本机 Gradle/JDK 17/Android SDK 后执行构建。
+
+### 2. 安装并导入配置
+
+运行 `app` 到安卓手机或模拟器后：
+
+1. 打开 `API Dashboard` App。
+2. 粘贴 `aiquota-token.json` 内容，或点击「从剪贴板粘贴并导入」。
+3. 也可以点击「选择 JSON 文件导入」选择 `aiquota-token.json`。
+4. 导入成功后 App 会立即刷新一次数据。
+
+Android 端使用与 iPhone 相同的 JSON 字段。凭证导入后写入加密存储，小组件只读取缓存后的展示数据。
+
+### 3. 添加桌面小组件
+
+在安卓桌面长按空白处，选择小组件，找到 `API Dashboard` 并添加到桌面。小组件会展示已启用且已配置凭证的平台：
+
+- 1-3 个平台：单行展示
+- 4 个平台：2x2 展示
+
+点按小组件会触发一次后台刷新。后台定时刷新由 WorkManager 调度，系统省电策略可能影响实际刷新时间。
+
+### 4. MiniMax 钱包余额
+
+Android 端同样推荐使用 Cloudflare Worker 代理查询 MiniMax 钱包余额。这样手机端不需要保存 MiniMax Cookie，只保存 Worker URL 和访问密码，Cookie 继续放在 Cloudflare Secret。

@@ -1,6 +1,6 @@
 # API Dashboard
 
-一个运行在 iPhone Scriptable 小组件里的 AI API 额度看板。它把 Claude Code、Codex、MiniMax 和 DeepSeek 的额度或余额集中显示在桌面/负一屏，适合需要频繁确认账户余量的 AI 工具重度用户。
+一个 AI API 额度看板。当前支持 iPhone Scriptable 小组件，也提供原生 Android 小组件工程，用来把 Claude Code、Codex、MiniMax 和 DeepSeek 的额度或余额集中显示在桌面/负一屏，适合需要频繁确认账户余量的 AI 工具重度用户。
 
 ## 功能概览
 
@@ -11,6 +11,7 @@
 - 中号小组件自适应布局：1-3 个平台单行均分，4 个平台自动 2x2
 - 金额低于 5 元时高亮为红色，5-20 元显示橙色
 - Token 与 API Key 存入 Scriptable Keychain，不写入脚本
+- Android 端 Token 与 API Key 存入 Android 加密存储，不明文落盘
 - MiniMax 钱包余额可通过 Cloudflare Worker 代理查询，避免手机端 Cookie 请求失败
 
 ## 文件说明
@@ -18,6 +19,7 @@
 | 文件 | 说明 |
 | --- | --- |
 | `ai-quota-widget.js` | Scriptable 小组件主脚本 |
+| `android/` | 原生 Android App 与 Glance 桌面小组件工程 |
 | `export-tokens.sh` | macOS 端导出配置的辅助脚本 |
 | `cloudflare/minimax-wallet-worker.js` | MiniMax 钱包余额查询代理 |
 | `cloudflare/wrangler.toml` | Cloudflare Worker 部署配置 |
@@ -26,6 +28,8 @@
 | `PROGRESS.md` | 当前版本状态与变更记录 |
 
 ## 快速开始
+
+### iPhone Scriptable
 
 1. 在 iPhone 安装 Scriptable。
 2. 在 Mac 上进入项目目录并导出配置：
@@ -40,10 +44,26 @@ bash export-tokens.sh > aiquota-token.json
 
 更完整的 MiniMax Worker、DeepSeek、手动配置说明见 [SETUP.md](SETUP.md)。
 
+### Android 原生小组件
+
+1. 用 Android Studio 打开 `android/` 目录。
+2. 运行 `app` 到安卓手机或模拟器。
+3. 在 App 内粘贴或选择 `aiquota-token.json` 导入。
+4. 在桌面添加 `API Dashboard` 小组件。
+
+命令行构建：
+
+```bash
+cd android
+gradle :app:assembleDebug
+```
+
+仓库当前没有提交 Gradle Wrapper；可用 Android Studio 直接同步构建，或在本机安装 JDK 17、Android SDK 和 Gradle 后执行构建。
+
 ## 安全说明
 
 - `aiquota-token.json`、`.env`、`.dev.vars` 等包含敏感信息的文件已在 `.gitignore` 中排除。
-- 小组件只在用户设备上保存凭证；Scriptable 端使用 Keychain。
+- 小组件只在用户设备上保存凭证；Scriptable 端使用 Keychain，Android 端使用 EncryptedSharedPreferences / Android Keystore。
 - Cloudflare Worker 只应保存 MiniMax Cookie 到 Secret，不应把 Cookie 写入仓库。
 - 相关接口包含非公开或非稳定的账户查询接口，平台改版后可能需要调整脚本。
 

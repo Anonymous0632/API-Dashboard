@@ -12,6 +12,7 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.anonymous.apidashboard.network.QuotaRepository
 import com.anonymous.apidashboard.widget.ApiQuotaWidget
+import androidx.glance.appwidget.updateAll
 import java.util.concurrent.TimeUnit
 
 class RefreshWorker(

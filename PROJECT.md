@@ -24,7 +24,7 @@ API Dashboard 是一个面向个人使用的手机桌面小组件项目，用于
 | iOS | `ai-quota-widget.js` | Scriptable 中号小组件 | Scriptable Keychain |
 | Android | `android/` | 原生 App + Glance 桌面小组件 | EncryptedSharedPreferences / Android Keystore |
 
-Android App 负责导入 `aiquota-token.json`、触发立即刷新和安排后台刷新；Glance 小组件读取缓存快照展示。后台刷新使用 WorkManager，周期为 Android 允许的 15 分钟级别；桌面小组件点按会发起一次即时刷新任务。
+Android App 负责导入 `aiquota-token.json`、触发立即刷新和安排后台刷新；Glance 小组件读取缓存快照展示。后台刷新使用 WorkManager，周期为 Android 允许的 15 分钟级别；桌面小组件点按会发起一次即时刷新任务。Android 工程当前使用 `compileSdk 36`、`targetSdk 35`，避免较新的 AndroidX 依赖强制改变运行时目标行为。
 
 ## 4. 数据接口
 
@@ -77,7 +77,7 @@ Worker 返回字段包括 `available_amount`、`cash_balance`、`voucher_balance
 - Android 后台刷新受 WorkManager 与系统省电策略调度，无法保证分钟级实时刷新。
 - MiniMax Cookie 可能提前失效，过期后需要更新 Cloudflare Secret。
 - Claude Code / Codex 的接口只提供比例和恢复时间，不提供完整 token 计数。
-- 当前仓库所在机器未安装 Java/Android SDK，因此 Android 工程已做静态检查，但命令行 APK 构建需在 Android Studio 或 JDK 17 + Android SDK 环境中完成。
+- Android APK 已在临时 JDK 17 + Android SDK 36 + Gradle 8.14.3 工具链下完成命令行构建；真机/模拟器上的桌面小组件视觉与交互仍需设备环境验证。
 
 ## 9. 验证清单
 
@@ -87,3 +87,4 @@ Worker 返回字段包括 `available_amount`、`cash_balance`、`voucher_balance
 - `git diff --check`
 - Worker 使用正确 token 返回余额，错误 token 返回 401
 - Android 工程：安装 Android Studio 后同步构建，或执行 `cd android && gradle :app:assembleDebug`
+- Android 构建产物：`android/app/build/outputs/apk/debug/app-debug.apk`，构建产物不提交仓库

@@ -18,6 +18,7 @@ import com.anonymous.apidashboard.data.SecureStore
 import com.anonymous.apidashboard.network.QuotaRepository
 import com.anonymous.apidashboard.widget.ApiQuotaWidget
 import com.anonymous.apidashboard.worker.RefreshWorker
+import androidx.glance.appwidget.updateAll
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

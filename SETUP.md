@@ -184,6 +184,7 @@ bash export-tokens.sh > aiquota-token.json
 - WorkManager
 - EncryptedSharedPreferences / Android Keystore
 - OkHttp
+- compileSdk 36 / targetSdk 35
 
 命令行构建可执行：
 
@@ -192,7 +193,7 @@ cd "/Users/anonymous/Downloads/API Dashboard/android"
 gradle :app:assembleDebug
 ```
 
-仓库当前没有提交 Gradle Wrapper。可先用 Android Studio 同步工程，或安装本机 Gradle/JDK 17/Android SDK 后执行构建。
+仓库当前没有提交 Gradle Wrapper。可先用 Android Studio 同步工程，或安装本机 Gradle/JDK 17/Android SDK 36 后执行构建。构建成功后 debug APK 位于 `android/app/build/outputs/apk/debug/app-debug.apk`。
 
 ### 2. 安装并导入配置
 

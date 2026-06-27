@@ -10,6 +10,7 @@
 - MiniMax 钱包余额优先使用 Cloudflare Worker 代理
 - Glance 桌面小组件显示 1-4 个平台卡片
 - WorkManager 后台定时刷新，App 内可手动刷新
+- compileSdk 36 / targetSdk 35
 
 ## 开发与运行
 
@@ -26,4 +27,4 @@ cd android
 gradle :app:assembleDebug
 ```
 
-当前仓库没有提交 Gradle Wrapper。可用 Android Studio 直接同步构建，或在安装 JDK 17、Android SDK 和本机 Gradle 后执行上面的命令。
+当前仓库没有提交 Gradle Wrapper。可用 Android Studio 直接同步构建，或在安装 JDK 17、Android SDK 36 和本机 Gradle 后执行上面的命令。构建成功后 debug APK 位于 `app/build/outputs/apk/debug/app-debug.apk`。
